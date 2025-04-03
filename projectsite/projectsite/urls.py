@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import path
 from studentorg.views import HomePageView, OrganizationList, OrganizationCreateView, OrganizationUpdateView, OrganizationDeleteView
 from studentorg.views import OrgMemberListView, OrgMemberCreateView, OrgMemberUpdateView, OrgMemberDeleteView
+from studentorg.views import StudentListView, StudentCreateView, StudentUpdateView, StudentDeleteView
 from studentorg import views
 
 urlpatterns = [
@@ -33,5 +34,12 @@ urlpatterns = [
     path('orgmember_list/add', OrgMemberCreateView.as_view(), name='orgmember-add'),
     path('orgmember_list/<pk>', OrgMemberUpdateView.as_view(), name='orgmember-update'),
     path('orgmember_list/<pk>/delete/', OrgMemberDeleteView.as_view(), name='orgmember-delete'),
+
+    #Student path 
+    path('student_list/', StudentListView.as_view(), name='student-list'),
+    path('student_list/add/', StudentCreateView.as_view(), name='student-add'),
+    path('student_list/<pk>/', StudentUpdateView.as_view(), name='student-update'),
+    path('student_list/<pk>/delete/', StudentDeleteView.as_view(), name='student-delete'),
+
 
 ]
