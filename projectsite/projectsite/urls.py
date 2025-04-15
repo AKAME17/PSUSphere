@@ -1,33 +1,34 @@
-"""
-URL configuration for projectsite project.
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/5.0/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
 from django.contrib import admin
 from django.urls import path, re_path
+from django.contrib.auth import views as auth_views
 from studentorg.views import HomePageView, OrganizationList, OrganizationCreateView, OrganizationUpdateView, OrganizationDeleteView
 from studentorg.views import OrgMemberListView, OrgMemberCreateView, OrgMemberUpdateView, OrgMemberDeleteView
 from studentorg.views import StudentListView, StudentCreateView, StudentUpdateView, StudentDeleteView
 from studentorg.views import CollegeListView, CollegeCreateView, CollegeUpdateView, CollegeDeleteView
 from studentorg.views import ProgramListView, ProgramCreateView, ProgramUpdateView, ProgramDeleteView
+from studentorg.views import HomePageView, ChartView, orgMemDoughnutChart,studentCountEveryCollege,radarStudenCountEveryCollege,programPolarchart, htmlLegendsChart
 
 from studentorg import views
-from django.contrib.auth import views as auth_views
+from django.db import connection
+from django.http import JsonResponse
+from django.db.models.functions import ExtractMonth
+
+from django.db.models import Count
+from datetime import datetime
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.HomePageView.as_view(), name= 'home'),
+
+    #charts
+    path('dashboard_chart', ChartView.as_view(), name='dashboard-chart'),
+    path('doughnut-chart/', orgMemDoughnutChart, name='doughnut-chart'),
+    path('doughnut-chart-college/', studentCountEveryCollege, name='doughnut-chart-college'),   
+    path('radar-chart-college/', radarStudenCountEveryCollege, name='radar-chart-college'),
+    path('program-polar-chart/', programPolarchart, name='program-polar-chart'),
+    path('html-legends-chart/', htmlLegendsChart, name='html-legends-chart'),
+
+
     path('organization_list', OrganizationList.as_view(), name='organization-list'),
     path ('organization_list/add', OrganizationCreateView.as_view(), name = 'organization-add'),
     path ('organization_list/<pk>', OrganizationUpdateView.as_view(), name = 'organization-update'),
